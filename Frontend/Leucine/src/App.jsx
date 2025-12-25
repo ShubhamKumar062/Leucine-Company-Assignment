@@ -1,8 +1,8 @@
 import "./App.css";
-import { useState} from "react";
+import { useState } from "react";
 import axios from "axios";
 
-const API_URL = "http://localhost:6966/api/users";
+const API_URL = "https://equipement-tracker-backend-3.onrender.com";
 function App() {
   const [equipe, setEquipe] = useState([]);
   const [editingId, setEditingId] = useState(null);
@@ -20,10 +20,6 @@ function App() {
     }
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const equipeData = { name, type, status, Cleaned };
@@ -34,7 +30,6 @@ function App() {
       } else {
         await axios.post(API_URL, equipeData);
       }
-
       setName("");
       setType("Machine");
       setStatus("Active");
@@ -42,6 +37,7 @@ function App() {
       fetchData();
     } catch (error) {
       alert("Error saving data");
+      console.log(error)
     }
   };
 
@@ -66,10 +62,19 @@ function App() {
 
   return (
     <>
-      <h1>Equipement Tracker</h1>
-
-      <form onSubmit={handleFormSubmit}>
-        <h3>{editingId ? "Update Equipment" : "Add New Equipment"}</h3>
+      <h1 style={{ textAlign: "center", color: "red" }}>Equipement Tracker</h1>
+      <form
+        style={{
+          maxWidth: "420px",
+          margin: "30px auto",
+          padding: "20px",
+          border: "1px solid black",
+        }}
+        onSubmit={handleFormSubmit}
+      >
+        <h3 style={{ color: "blue" }}>
+          {editingId ? "Update Equipment" : "Add New Equipment"}
+        </h3>
         <label>Name: </label>
         <input
           type="text"
@@ -109,9 +114,9 @@ function App() {
           <button onClick={() => setEditingId(null)}>Cancel</button>
         )}
       </form>
-    <hr />
+      <hr />
 
-    <h3>Equipment List</h3>
+      <h3>Equipment List</h3>
       <table border="1" cellPadding="10">
         <thead>
           <tr>
