@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import axios from "axios";
 
 const API_URL = "http://localhost:6966/api/users";
@@ -66,7 +66,7 @@ function App() {
 
   return (
     <>
-      <h1 style={{ textAlign: "center", color: "red" }}>Equipement Tracker</h1>
+      <h1>Equipement Tracker</h1>
 
       <form onSubmit={handleFormSubmit}>
         <h3>{editingId ? "Update Equipment" : "Add New Equipment"}</h3>
