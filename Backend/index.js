@@ -10,12 +10,8 @@ app.use(cors());
 app.use("/api/users", userRoutes)
 const PORT = process.env.PORT
 
-connectedDB.then(()=>{
-    app.listen(PORT , ()=>{
+connectedDB()
+app.listen(PORT , ()=>{
     console.log(`Server is Connected on ${PORT}`)
 })
-}).catch((err) =>{
-    console.log(`Server is not working`,err)
-})
-
 

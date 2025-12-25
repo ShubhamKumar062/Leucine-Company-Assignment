@@ -1,20 +1,24 @@
 import "./App.css";
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import axios from "axios";
 
-const API_URL = "https://equipement-tracker-backend-3.onrender.com";
+const API_URL = "https://equipement-tracker-backend-3.onrender.com/api/users";
 function App() {
   const [equipe, setEquipe] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [name, setName] = useState("");
   const [type, setType] = useState("Machine");
   const [status, setStatus] = useState("Active");
-  const [Cleaned, setCleaned] = useState("");
+  const [cleaned, setCleaned] = useState("");
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
     try {
       const response = await axios.get(API_URL);
-      setEquipe(response.data);
+      setEquipe(response.data.User);
     } catch (error) {
       console.log("Error loading data:", error);
     }
@@ -22,7 +26,7 @@ function App() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    const equipeData = { name, type, status, Cleaned };
+    const equipeData = { name, type, status, cleaned: new Date(cleaned) };
     try {
       if (editingId) {
         await axios.put(`${API_URL}/${editingId}`, equipeData);
@@ -57,7 +61,7 @@ function App() {
     setName(item.name);
     setType(item.type);
     setStatus(item.status);
-    setCleaned(item.Cleaned.split("T")[0]);
+    setCleaned(item.cleaned.split("T")[0]);
   };
 
   return (
@@ -101,7 +105,7 @@ function App() {
         <label>Last Cleaned: </label>
         <input
           type="date"
-          value={Cleaned}
+          value={cleaned}
           onChange={(e) => setCleaned(e.target.value)}
           required
         />
@@ -111,7 +115,7 @@ function App() {
           {editingId ? "Save Changes" : "Add Equipment"}
         </button>
         {editingId && (
-          <button onClick={() => setEditingId(null)}>Cancel</button>
+          <button type="button" onClick={() => setEditingId(null)}>Cancel</button>
         )}
       </form>
       <hr />
@@ -133,7 +137,7 @@ function App() {
               <td>{item.name}</td>
               <td>{item.type}</td>
               <td>{item.status}</td>
-              <td>{new Date(item.Cleaned).toLocaleDateString()}</td>
+              <td>{item.cleaned ? new Date(item.cleaned).toLocaleDateString() : "N/A"}</td>
               <td>
                 <button onClick={() => startEdit(item)}>Edit</button>
                 <button onClick={() => deleteItem(item._id)}>Delete</button>
